@@ -2,6 +2,7 @@ class MovieRating
 	def initialize
 		@raw_data = []
 		@popularity = {}
+		@users = {}
 	end
 
 	def load_data
@@ -14,7 +15,19 @@ class MovieRating
 		end
 	end
 
-	def load_popularities()
+	def load_users
+		@users = {}
+		@raw_data.each do |entry|
+			if @users[entry[0]]
+				@users[entry[0]][entry[1]] = entry[2]
+			else
+				@users[entry[0]] = {}
+				@users[entry[0]][entry[1]] = entry[2]
+			end
+		end
+	end
+
+	def load_popularities
 		# puts popularities into a hash by movie id
 		# popularities are determined by combined total ratings on
 		# a scale from -2 to 2, figuring that a rating of 1 or 2
@@ -41,10 +54,46 @@ class MovieRating
 		return @popularity
 	end
 
+	def users
+		return @users
+	end
+
+	def similarity(user1, user2)
+		# Similarity is determined by adding up the ratings for
+		# all movies shared by both users, adjusted for
+		# difference in rating
+		factor = 0
+		users[user1].each_pair do |movie1, rating1|
+			users[user2].each_pair do |movie2, rating2|
+				if movie1 == movie2
+					factor += (5 - (rating1-rating2).abs)
+				end
+			end
+		end
+		return factor
+	end
+
+	def most_similar(user1)
+		# Finds the most similar user or users to the given user
+		best_fit = 0
+		partners = []
+		users.each_pair do |user2, movie|
+			this_fit = similarity(user1, user2)
+			if this_fit > best_fit
+				partners = [user2]
+			elsif this_fit == best_fit
+				partners << user2
+			end
+		end
+		return partners
+	end
 
 end
 
 instance = MovieRating.new
 instance.load_data
 instance.load_popularities
-puts instance.popularity_list.inspect
+instance.load_users
+#puts instance.popularity_list.inspect
+#puts instance.users.inspect
+#puts instance.most_similar(1).inspect
