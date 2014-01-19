@@ -94,6 +94,15 @@ instance = MovieRating.new
 instance.load_data
 instance.load_popularities
 instance.load_users
-#puts instance.popularity_list.inspect
-#puts instance.users.inspect
-#puts instance.most_similar(1).inspect
+
+
+a = instance.popularity_list
+i = 0
+a.each_pair do |b,c|
+	if i < 10
+		puts b
+		i += 1
+	end
+end
+	
+puts instance.most_similar(1).inspect
