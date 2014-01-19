@@ -63,8 +63,8 @@ class MovieRating
 		# all movies shared by both users, adjusted for
 		# difference in rating
 		factor = 0
-		users[user1].each_pair do |movie1, rating1|
-			users[user2].each_pair do |movie2, rating2|
+		@users[user1].each_pair do |movie1, rating1|
+			@users[user2].each_pair do |movie2, rating2|
 				if movie1 == movie2
 					factor += (5 - (rating1-rating2).abs)
 				end
@@ -77,7 +77,7 @@ class MovieRating
 		# Finds the most similar user or users to the given user
 		best_fit = 0
 		partners = []
-		users.each_pair do |user2, movie|
+		@users.each_pair do |user2, movie|
 			this_fit = similarity(user1, user2)
 			if this_fit > best_fit
 				partners = [user2]
@@ -95,14 +95,24 @@ instance.load_data
 instance.load_popularities
 instance.load_users
 
-
+puts "Most popular movies:"
 a = instance.popularity_list
 i = 0
-a.each_pair do |b,c|
+a.each do |b|
 	if i < 10
-		puts b
+		puts b[0]
 		i += 1
 	end
 end
-	
+
+puts "Most unpopular movies:"
+i = 0
+a.reverse.each do |b|
+	if i < 10
+		puts b[0]
+		i += 1
+	end
+end
+
+puts "Most similar user(s) to user 1:"
 puts instance.most_similar(1).inspect
