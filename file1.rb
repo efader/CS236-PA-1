@@ -34,11 +34,10 @@ class MovieRating
 	end
 
 	def popularity(movie_id)
-
 		return @popularity[movie_id]
 	end
 
-	def popularities
+	def popularity_list
 		return @popularity
 	end
 
@@ -48,5 +47,4 @@ end
 instance = MovieRating.new
 instance.load_data
 instance.load_popularities
-puts instance.popularities.inspect
-puts instance.popularity(1663)
+puts instance.popularity_list.inspect
