@@ -1,3 +1,5 @@
+#Evan Fader
+
 class MovieRating	
 	def initialize
 		@raw_data = []
