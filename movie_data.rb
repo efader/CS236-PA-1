@@ -78,11 +78,14 @@ class MovieRating
 		best_fit = 0
 		partners = []
 		@users.each_pair do |user2, movie|
-			this_fit = similarity(user1, user2)
-			if this_fit > best_fit
-				partners = [user2]
-			elsif this_fit == best_fit
-				partners << user2
+			if user1 != user2
+				this_fit = similarity(user1, user2)
+				if this_fit > best_fit
+					best_fit = this_fit
+					partners = [user2]
+				elsif this_fit == best_fit
+					partners << user2
+				end
 			end
 		end
 		return partners
